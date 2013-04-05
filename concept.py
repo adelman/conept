@@ -6,6 +6,7 @@ Based on SMBC 2922
 
 import sys
 import urllib2
+import datetime
 
 def main(argv):
 
@@ -13,19 +14,21 @@ def main(argv):
 
     year = input("Enter your birth year (yyyy): ")
     month = input("Enter your birth month as a number: ")
-    day = raw_input("Enter your birth day " + s)
+    day = input("Enter your birth day " + s)
 
-    if month < 10:
-        year = year - 1
+    date1 = datetime.date(year, month, day)
 
-    new_month = _month_conversion(month)
-    str_year = "%d" % year
+    conception = date1 - datetime.timedelta(days = 266)
+
+    new_month = _month_conversion(conception.month)
+    str_year = "%d" % (conception.year)
+    str_day = "%d" % (conception.day)
 
     if new_month == "not valid":
         print "You didn't enter a valid month!"
 
-    rest = str_year + "/" + new_month + "/" + day
-    date = (new_month + ", " + day + " " + str_year).title()
+    rest = str_year + "/" + new_month + "/" + str_day
+    date = (new_month + ", " + str_day + " " + str_year).title()
 
     request = urllib2.Request("http://www.historyorb.com/date/" + rest)
     result = (urllib2.urlopen(request)).read()
@@ -47,34 +50,29 @@ def main(argv):
     return
         
 def _month_conversion(month):
-    if month < 10:
-        new_month =  (month - 9 + 12) % 12
-    else:
-        new_month =  month - 9
-
-    if new_month == 1:
+    if month == 1:
         return "january"
-    elif new_month == 2:
+    elif month == 2:
         return "february"
-    elif new_month == 3:
+    elif month == 3:
         return "march"
-    elif new_month == 4:
+    elif month == 4:
         return "april"
-    elif new_month == 5:
+    elif month == 5:
         return "may"
-    elif new_month == 6:
+    elif month == 6:
         return "june"
-    elif new_month == 7:
+    elif month == 7:
         return "july"
-    elif new_month == 8:
+    elif month == 8:
         return "august"
-    elif new_month == 9:
+    elif month == 9:
         return "september"
-    elif new_month == 10:
+    elif month == 10:
         return "october"
-    elif new_month == 11:
+    elif month == 11:
         return "november"
-    elif new_month == 12:
+    elif month == 12:
         return "december"
     else:
         return "not valid"
