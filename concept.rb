@@ -5,6 +5,7 @@
 require 'rubygems'
 require 'curb'
 require 'curb-fu'
+require 'date'
 
 def main
     
@@ -16,18 +17,16 @@ def main
     print "Enter your birth day as a number #{s}"
     day = Integer(gets.chomp)
 
-    if month < 10
-        year = year - 1
-    end
-
     unless month <= 12 && month >= 1
         puts "Not a valid month"
         return
     end
 
-    new_month = month_conversion(month)
+    con = (Date.new(year, month, day) - 266)
 
-    rest = "#{year}/#{new_month}/#{day}"
+    new_month = month_conversion(con.month)
+
+    rest = "#{con.year}/#{new_month}/#{con.day}"
     date = "#{new_month}, #{day} #{year}".capitalize!
 
     req = Curl.get("http://www.historyorb.com/date/" + rest)
@@ -53,13 +52,7 @@ def main
 
 end
 
-def month_conversion(month)
-    if month < 10
-        new_month = (month - 9) % 12
-    else
-        new_month = month - 9
-    end
-
+def month_conversion(new_month)
     if new_month == 1
         return "january"
     elsif new_month == 2
